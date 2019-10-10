@@ -16,12 +16,12 @@ class CreateMemberDataTable extends Migration
         Schema::create('member_data', function (Blueprint $table) {
 
             // $table->date('created_at');
-            $table->bigIncrements('id');
+            $table->increments('id');
             $table->string('member_number');
             $table->string('first_name');
             $table->string('last_name');
             $table->date('dob');
-            $table->string('email')->unique();
+            $table->string('email');
             $table->string('gender');
             $table->string('job_title');
             $table->timestamps();

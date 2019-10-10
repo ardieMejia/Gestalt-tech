@@ -73,11 +73,35 @@ class PagesController extends Controller
                     // Insert to MySQL database
                     foreach($importData_arr as $importData){
 
+                        // for now, out script is for one time use only
+                        // $insertData = array(
+                        //     "username"=>$importData[0],
+                        //     "name"=>$importData[1],
+                        //     "gender"=>$importData[2],
+                        //     "email"=>$importData[3]);
+                        // Page::insertData($insertData);
+
+                        // member data
+                        // $insertData = array(
+                        //     "id"=>$importData[0],
+                        //     "member_number"=>$importData[1],
+                        //     "first_name"=>$importData[2],
+                        //     "last_name"=>$importData[3],
+                        //     "dob"=>$importData[4],
+                        //     "email"=>$importData[5],
+                        //     "gender"=>$importData[6],
+                        //     "job_title"=>$importData[7]);
+
+                        // transaction data
                         $insertData = array(
-                            "username"=>$importData[0],
-                            "name"=>$importData[1],
-                            "gender"=>$importData[2],
-                            "email"=>$importData[3]);
+                            "id"=>$importData[0],
+                            "amount"=>$importData[1],
+                            "transaction_date"=>$importData[2],
+                            "member_number"=>$importData[3]);
+
+
+
+
                         Page::insertData($insertData);
 
                     }

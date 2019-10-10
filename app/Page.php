@@ -12,7 +12,10 @@ class Page extends Model
 
         // $value=DB::table('users')->where('username', $data['username'])->get();
         // if($value->count() == 0){
-            DB::table('users')->insert($data);
+            // DB::table('users')->insert($data);
+            // DB::table('member_data')->insert($data);
+        DB::table('transation_data')->insert($data);
+
         // }
     }
 }
