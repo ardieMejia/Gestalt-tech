@@ -74,10 +74,10 @@ class PagesController extends Controller
                     foreach($importData_arr as $importData){
 
                         $insertData = array(
-                            "username"=>$importData[1],
-                            "name"=>$importData[2],
-                            "gender"=>$importData[3],
-                            "email"=>$importData[4]);
+                            "username"=>$importData[0],
+                            "name"=>$importData[1],
+                            "gender"=>$importData[2],
+                            "email"=>$importData[3]);
                         Page::insertData($insertData);
 
                     }
