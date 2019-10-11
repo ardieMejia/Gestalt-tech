@@ -22,6 +22,8 @@ Route::post('/uploadFile', 'PagesController@uploadFile');
 Route::get('/member', 'MemberController@index')->name('member');
 Route::post('/member', 'MemberController@store');
 
-
+// transaction
+Route::get('/transaction', 'TransactionController@index')->name('transaction');
+Route::post('/transaction', 'TransactionController@store'); 
 
 

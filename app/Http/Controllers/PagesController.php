@@ -128,7 +128,7 @@ class PagesController extends Controller
                             $insertData = array(
                                 "id"=>$importData[0],
                                 "amount"=>$importData[1],
-                                "transaction_date"=>$importData[2],
+                                "transaction_date"=>$importData[2], // csv uses - as delimiter, so this works
                                 "member_number"=>$importData[3]);
 
                             Page::insertTransactionData($insertData);

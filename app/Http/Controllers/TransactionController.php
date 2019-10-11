@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\MemberData;
+use App\TransactionData;
 use Carbon\Carbon;
 
-class MemberController extends Controller
+class TransactionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +16,9 @@ class MemberController extends Controller
     public function index()
     {
         //
-        $allMemberData = MemberData::all();
-        return view('member.list_and_crud',['allMemberData' => $allMemberData]);
+        $allTransactionData = TransactionData::all();
+
+        return view('transaction.list_and_crud',['allTransactionData' => $allTransactionData]);
     }
 
     /**
@@ -39,23 +40,14 @@ class MemberController extends Controller
     public function store(Request $request)
     {
         //
-        // $request->member_number;
-        // MemberData->save();
-        $newMember = new MemberData;
-        $newMember->member_number = $request->member_number;
-        $newMember->first_name = $request->first_name;
-        $newMember->last_name = $request->last_name;
-        $newDOB = Carbon::createFromFormat('m/d/Y',$request->dob);
-        $newMember->dob = $newDOB;
-        $newMember->email = $request->email;
-        $newMember->gender = $request->gender;
-        $newMember->job_title = $request->job_title;
-        $newMember->save();
+        $newTransaction = new TransactionData;
+        $newTransaction->amount = $request->amount;
+        $newDate = Carbon::createFromFormat('m/d/Y',$request->transaction_date);
+        $newTransaction->transaction_date = $newDate;
+        $newTransaction->member_number = $request->member_number;
+        $newTransaction->save();
 
-
-        return redirect()->route('member');
-
-
+        return redirect()->route('transaction');
     }
 
     /**

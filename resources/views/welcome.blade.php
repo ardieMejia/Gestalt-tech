@@ -20,13 +20,13 @@
                     <a href={{route("member")}}>Member Maintenance</a>
                 </div>
                 <div class="col-md-3">
-                    <a href=>Transation Maintenance</a>
+                    <a href={{route("transaction")}}>Transaction Maintenance</a>
                 </div>
             </div>
 
 
 
-            
+
         </div>
     </body>
 </html>
