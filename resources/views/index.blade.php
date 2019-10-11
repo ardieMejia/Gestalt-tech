@@ -9,6 +9,19 @@
         <p >{{ Session::get('message') }}</p>
      @endif
 
+         @if(Session::has('ignored_rows'))
+             <h4>{{ Session::get('ignored_rows') }} ignored rows</h4>
+         @endif
+         @if(Session::has('ignored'))
+             @php $ignored = Session::get('ignored'); @endphp
+             <h4>First 5 ignored :</h4>
+             <ul>
+                 @for($i=0;$i<5;$i++)
+                     <li>{{ $ignored[$i]["id"] }}, {{ $ignored[$i]["first_name"] }}, {{ $ignored[$i]["last_name"] }}</li>
+                 @endfor
+             </ul>
+         @endif
+
      <!-- Form -->
      <form method='post' action='/uploadFile' enctype='multipart/form-data' >
        {{ csrf_field() }}

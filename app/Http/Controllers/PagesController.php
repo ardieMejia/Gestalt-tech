@@ -59,7 +59,7 @@ class PagesController extends Controller
 
                     while (($filedata = fgetcsv($file, 1000, ",")) !== FALSE) {
                         $num = count($filedata );
-             
+
                         // Skip first row (Remove below comment if you want to skip the first row)
                         /*if($i == 0){
                           $i++;
@@ -80,12 +80,15 @@ class PagesController extends Controller
                     }else{
                         $previously_uploaded = null;
                     }
+                    $ignored_rows = 0;
+                    $ignored = [];
 
 
 
                     if ($filename == "member_data.csv" && $previously_uploaded != 'member_data.csv'){
 
                         foreach($importData_arr as $importData){
+
                             // member data
                             $insertData = array(
                                 "id"=>$importData[0],
@@ -97,9 +100,21 @@ class PagesController extends Controller
                                 "gender"=>$importData[6],
                                 "job_title"=>$importData[7]);
 
-                            Page::insertMemberData($insertData);
+                            try {
 
+                                Page::insertMemberData($insertData);
+
+                            } catch (\Illuminate\Database\QueryException $e) {
+
+                                $r = ["id"=>$importData[0],"first_name"=>$importData[2],"last_name"=>$importData[3]];
+                                array_push($ignored, $r);
+                                $ignored_rows++;
+
+                            }
                         }
+                        Session::flash('ignored_rows', $ignored_rows);
+                        Session::flash('ignored', $ignored);
+
                     }elseif ($filename == "transaction_data.csv" && $previously_uploaded != 'transaction_data.csv'){
 
                         foreach($importData_arr as $importData){
@@ -134,6 +149,7 @@ class PagesController extends Controller
         }
 
         // Redirect to index
+
         return redirect()->action('PagesController@index');
     }
 

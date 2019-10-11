@@ -21,7 +21,7 @@ class CreateMemberDataTable extends Migration
             $table->string('first_name');
             $table->string('last_name');
             $table->date('dob');
-            $table->string('email');
+            $table->string('email')->unique();
             $table->string('gender');
             $table->string('job_title');
             $table->timestamps();
