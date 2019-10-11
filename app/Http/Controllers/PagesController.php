@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Session;
 use Illuminate\Http\Request;
 use App\Page;
+use App\TransactionData;
+use App\MemberData;
 
 class PagesController extends Controller
 {
@@ -70,41 +72,55 @@ class PagesController extends Controller
                     }
                     fclose($file);
 
-                    // Insert to MySQL database
-                    foreach($importData_arr as $importData){
-
-                        // for now, out script is for one time use only
-                        // $insertData = array(
-                        //     "username"=>$importData[0],
-                        //     "name"=>$importData[1],
-                        //     "gender"=>$importData[2],
-                        //     "email"=>$importData[3]);
-                        // Page::insertData($insertData);
-
-                        // member data
-                        // $insertData = array(
-                        //     "id"=>$importData[0],
-                        //     "member_number"=>$importData[1],
-                        //     "first_name"=>$importData[2],
-                        //     "last_name"=>$importData[3],
-                        //     "dob"=>$importData[4],
-                        //     "email"=>$importData[5],
-                        //     "gender"=>$importData[6],
-                        //     "job_title"=>$importData[7]);
-
-                        // transaction data
-                        $insertData = array(
-                            "id"=>$importData[0],
-                            "amount"=>$importData[1],
-                            "transaction_date"=>$importData[2],
-                            "member_number"=>$importData[3]);
-
-
-
-
-                        Page::insertData($insertData);
-
+                    // trying to access existant data
+                    if(TransactionData::first()){
+                        $previously_uploaded = 'transaction_data.csv';
+                    }elseif(MemberData::first()){
+                        $previously_uploaded = 'member_data.csv';
+                    }else{
+                        $previously_uploaded = null;
                     }
+
+
+
+                    if ($filename == "member_data.csv" && $previously_uploaded != 'member_data.csv'){
+
+                        foreach($importData_arr as $importData){
+                            // member data
+                            $insertData = array(
+                                "id"=>$importData[0],
+                                "member_number"=>$importData[1],
+                                "first_name"=>$importData[2],
+                                "last_name"=>$importData[3],
+                                "dob"=>$importData[4],
+                                "email"=>$importData[5],
+                                "gender"=>$importData[6],
+                                "job_title"=>$importData[7]);
+
+                            Page::insertMemberData($insertData);
+
+                        }
+                    }elseif ($filename == "transaction_data.csv" && $previously_uploaded != 'transaction_data.csv'){
+
+                        foreach($importData_arr as $importData){
+
+                            // transaction data
+                            $insertData = array(
+                                "id"=>$importData[0],
+                                "amount"=>$importData[1],
+                                "transaction_date"=>$importData[2],
+                                "member_number"=>$importData[3]);
+
+                            Page::insertTransactionData($insertData);
+
+                        }
+                    }else{
+                        return "invalid file name OR attempting to upload into non-empty table";
+                    }
+
+
+                    // Insert to MySQL database
+
 
                     Session::flash('message','Import Successful.');
                 }else{
