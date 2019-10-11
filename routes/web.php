@@ -11,7 +11,17 @@
 |
 */
 
-Route::get('/', 'PagesController@index'); 
+
+Route::get('/', 'HomeController@index')->name('home'); 
+
+// for uploading the file
+Route::get('/uploadpage', 'PagesController@index')->name('uploadpage'); 
 Route::post('/uploadFile', 'PagesController@uploadFile');
+
+// member
+Route::get('/member', 'MemberController@index')->name('member');
+Route::post('/member', 'MemberController@store');
+
+
 
 

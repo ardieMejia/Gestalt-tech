@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Page;
 use App\TransactionData;
 use App\MemberData;
+use Carbon\Carbon;
 
 class PagesController extends Controller
 {
@@ -95,10 +96,11 @@ class PagesController extends Controller
                                 "member_number"=>$importData[1],
                                 "first_name"=>$importData[2],
                                 "last_name"=>$importData[3],
-                                "dob"=>$importData[4],
+                                "dob"=>Carbon::createFromFormat('d/m/Y',$importData[4]),
                                 "email"=>$importData[5],
                                 "gender"=>$importData[6],
                                 "job_title"=>$importData[7]);
+
 
                             try {
 
@@ -112,8 +114,11 @@ class PagesController extends Controller
 
                             }
                         }
-                        Session::flash('ignored_rows', $ignored_rows);
-                        Session::flash('ignored', $ignored);
+                        if($ignored_rows != 0){
+                            Session::flash('ignored_rows', $ignored_rows);
+                            Session::flash('ignored', $ignored);
+                        }
+
 
                     }elseif ($filename == "transaction_data.csv" && $previously_uploaded != 'transaction_data.csv'){
 
