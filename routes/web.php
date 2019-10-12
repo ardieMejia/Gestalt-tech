@@ -13,19 +13,6 @@
 
 
 
-
-Route::get('/', 'ImportController@getImport')->name('import');
-Route::post('/import_parse', 'ImportController@parseImport')->name('import_parse');
-Route::post('/import_process', 'ImportController@processImport')->name('import_process');
-
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
-=======
 Route::get('/', 'HomeController@index')->name('home'); 
 
 // for uploading the file
@@ -45,4 +32,4 @@ Route::get('/enquiry', 'EnquiryController@search')->name('enquiry');
 
 
 
->>>>>>> theRealQuestion_slow
+
