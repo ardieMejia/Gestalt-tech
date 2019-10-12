@@ -50,9 +50,16 @@
 
                 </div>
                 <div class="col-md-9 border p-4">
-
                     <table id="example2" class="display">
+                        <thead>
+                            <tr>
+                                <th>id</th>
+                                <th>amount</th>
+                                <th>transaction_date</th>
+                                <th>member_number</th>
 
+                            </tr>
+                        </thead>
                     </table>
                 </div>
 
@@ -66,71 +73,43 @@
 
         <script>
 
-          
-            dataSet2 = [
-            @foreach ($allTransactionData as $transactionData)
-                {
-                "id" : "{{$transactionData->id}}",
-                "amount" : "{{$transactionData->amount}}",
-                "transaction_date" : "{{$transactionData->transaction_date}}",
-                "member_number" : "{{$transactionData->member_number}}",
-                },
-            @endforeach
+         
+         dataSet2 = [
+             @foreach ($allTransactionData as $transactionData)
+             {
+                 "id" : "{{$transactionData->id}}",
+                 "amount" : "{{$transactionData->amount}}",
+                 "transaction_date" : "{{$transactionData->transaction_date}}",
+                 "member_number" : "{{$transactionData->member_number}}",
+             },
+             @endforeach
 
-            ];
-
-
-            $(document).ready(function() {
-            // ---------- datepicker ----------
-            $('#datepicker').datepicker();
-            // ---------- datepicker ----------
+         ];
 
 
-            // the rest is datatable stuff
+         $(document).ready(function() {
+             // ---------- datepicker ----------
+             $('#datepicker').datepicker();
+             // ---------- datepicker ----------
+
+
+             // the rest is datatable stuff
 
 
 
-            // ---------- wait ----------
-            var mytable = $('#example2').DataTable( {
-            data: dataSet2,
-            columns: [
-            { data: "id" },
-            { data: "amount" },
-            { data: "transaction_date" },
-            { data: "member_number" },
-            { data: null },
-            { data: null },
-            ],
-            "columnDefs": [
-            {
-            "targets": -1,
-            "render": function (data, type, row){
-            // failed to use route() here, instead use this
-            editHTMLstring = '<a href="/user/'+'23'+'/edit">Edit</a>';
-            return editHTMLstring;
-            }
-            },
-            {
-            "targets": -2,
-            "render": function (data, type, row){
-            // failed to use route() here, instead use this
+             // ---------- wait ----------
+             var mytable = $('#example2').DataTable( {
+                 sDom: 'lrtip', // hide original search without disabling filtering
+                 data: dataSet2,
+                 columns: [
+                     { data: "id" },
+                     { data: "amount" },
+                     { data: "transaction_date" },
+                     { data: "member_number" },
 
-            // Javascript template literals
+                 ],
 
-            var deleteHTMLstring = `
-            <form metho     d="post" action="/user/2">
-                {{csrf_field()}}
-                <input type="hidden" />
-                <input type="hidden" name="_method" value="DELETE">
-                <input type="submit" value="delete"/>
-            </form>
-            `;
-            return deleteHTMLstring;
-            }
-            }
-            ]
-
-            } );
+             } );
              // ---------- wait ----------
 
              $('#transactionSearchInput').on('keyup', function(){

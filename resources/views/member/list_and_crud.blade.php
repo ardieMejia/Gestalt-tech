@@ -70,6 +70,19 @@
                 <div class="col-md-9 border p-4">
 
                     <table id="example2" class="display">
+                        <thead>
+                            <tr>
+                                <th>id</th>
+                                <th>Member Number</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>DOB</th>
+                                <th>Email</th>
+                                <th>Gender</th>
+                                <th>Job Title</th>
+
+                            </tr>
+                        </thead>
 
                     </table>
                 </div>
@@ -113,51 +126,26 @@
 
 
             // ---------- wait ----------
-            var mytable = $('#example2').DataTable( {
-            data: dataSet2,
-            columns: [
-            { data: "id" },
-            { data: "member_number" },
-            { data: "first_name" },
-            { data: "last_name" },
-            { data: "dob" },
-            { data: "email" },
-            { data: "gender" },
-            { data: "job_title" },
-            { data: null },
-            { data: null },
-            ],
-            "columnDefs": [
-            {
-            "targets": -1,
-            "render": function (data, type, row){
-            // failed to use route() here, instead use this
-            editHTMLstring = '<a href="/user/'+'23'+'/edit">Edit</a>';
-            return editHTMLstring;
-            }
-            },
-            {
-            "targets": -2,
-            "render": function (data, type, row){
-            // failed to use route() here, instead use this
+                var mytable = $('#example2').DataTable( {
+                    sDom: 'lrtip', // hide original search without disabling filtering
+                    data: dataSet2,
 
-            // Javascript template literals
+                    columns: [
+                        { data: "id" },
+                        { data: "member_number" },
+                        { data: "first_name" },
+                        { data: "last_name" },
+                        { data: "dob" },
+                        { data: "email" },
+                        { data: "gender" },
+                        { data: "job_title" },
 
-            var deleteHTMLstring = `
-            <form method="post" action="/user/2">
-                {{csrf_field()}}
-                <input type="hidden" />
-                <input type="hidden" name="_method" value="DELETE">
-                <input type="submit" value="delete"/>
-            </form>
-            `;
-            return deleteHTMLstring;
-            }
-            }
-            ]
+                    ],
 
-            } );
+
+                } );
              // ---------- wait ----------
+
 
              $('#memberSearchInput').on('keyup', function(){
                  mytable.search(this.value).draw();

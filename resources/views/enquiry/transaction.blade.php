@@ -21,43 +21,69 @@
             <h1>Transation Enquiry</h1>
             <div class="row">
                 <div class="col-md-4 border p-4">
-
+                    <input type="text" id="transactionSearchInput" />
 
                 </div>
                 <div class="col-md-8 border p-4">
-                    <table>
-                        <tr>
-                            <th>Job Title</th>
-                            <th>Total Transaction Amount</th>
-                            <th>Average <small>(example: "average transactions done by an Accountant Assistant")</small></th>
-                        </tr>
-                        @foreach ($transArray as $eachTransItem)
+
+                    <table id="example2" class="display">
+                        <thead>
                             <tr>
-                                <td>
-                                    @if($eachTransItem["job_title"] == "")
-                                        ---
-                                    @else
-                                        {{$eachTransItem["job_title"]}}
-                                    @endif
-
-                                </td>
-                                <td>{{$eachTransItem["count"]}}</td>
-                                <td>{{$eachTransItem["average"]}}</td>
+                                <th>Job Title</th>
+                                <th>Total Transaction Amount</th>
+                                <th>Average <small>(example: "average transactions done by an Accountant Assistant")</small></th>
                             </tr>
-                        @endforeach
-
+                        </thead>
                     </table>
 
                 </div>
 
             </div>
 
-
-
-
-
         </div>
 
+        <script>
+
+         dataSet2 = [
+             @foreach ($transArray as $eachTransItem)
+             {
+
+                 "job_title" : "{{$eachTransItem['job_title']}}",
+                 "count" : "{{$eachTransItem['count']}}",
+                 "average" : "{{$eachTransItem['average']}}",
+             },
+             @endforeach
+
+         ];
+
+         $(document).ready(function() {
+             // ---------- datepicker ----------
+             $('#datepicker').datepicker();
+             // ---------- datepicker ----------
+
+
+             // the rest is datatable stuff
+
+
+             // ---------- wait ----------
+             var mytable = $('#example2').DataTable( {
+                 sDom: 'lrtip', // hide original search without disabling filtering
+                 data: dataSet2,
+                 columns: [
+                     { data: "job_title" },
+                     { data: "count" },
+                     { data: "average" }
+                 ]
+
+
+             } );
+             // ---------- wait ----------
+
+             $('#transactionSearchInput').on('keyup', function(){
+                 mytable.search(this.value).draw();
+             });
+         } );
+        </script>
 
     </body>
 </html>
