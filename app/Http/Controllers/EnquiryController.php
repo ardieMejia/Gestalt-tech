@@ -96,26 +96,55 @@ class EnquiryController extends Controller
                    ->selectRaw('member_data.job_title as job_title,count(*) as memberCount')
                               ->groupBy('member_data.job_title');
 
-            $cache = DB::table("transaction_data as t")
+            $initialTransArray = DB::table("transaction_data as t")
                    ->leftJoin('member_data','t.member_number','=','member_data.member_number')
                    ->selectRaw('member_data.job_title as job_title,count(*) as count,m2.memberCount')
                    ->join(DB::raw('(' . $memberCountQuery->toSql() . ') m2'),
                               function ($join) {
                                   $join->on('member_data.job_title','=','m2.job_title');
-                                      
                               }
                    )
                    ->groupBy('member_data.job_title')
                    ->get();
 
+            $initialTransArray = $initialTransArray->toArray();
+            // ---------- trim trailing character I, II, III, IV
+            $cleanedTransArray = [];
+            foreach ($initialTransArray as $transItem) {
+                $transItem->job_title = rtrim($transItem->job_title," I");
+                $transItem->job_title = rtrim($transItem->job_title," II");
+                $transItem->job_title = rtrim($transItem->job_title," III");
+                $transItem->job_title = rtrim($transItem->job_title," IV");
+                array_push($cleanedTransArray,["job_title" => $transItem->job_title,"count" => $transItem->count,"memberCount" => $transItem->memberCount]);
+            }
+
+
+            // loop through and add up similar job_titles
+            $transArray = [];
+            $first = $cleanedTransArray[0];
+            $first["average"] = round($first["count"]/$first["memberCount"],3);
+
+            array_push($transArray,$first);
+            $job_title_prev = $cleanedTransArray[1]["job_title"];
+            $count = $cleanedTransArray[1]["count"];
+            $memberCount = $cleanedTransArray[1]["memberCount"];
+            for ($i = 2; $i < sizeof($cleanedTransArray); $i++) {
+                if ($cleanedTransArray[$i]["job_title"] == $job_title_prev) {
+                    $count += $cleanedTransArray[$i]["count"];
+                    $memberCount += $cleanedTransArray[$i]["memberCount"];
+                } else {                 //   otherwise
+                    array_push($transArray,["job_title" => $job_title_prev,"count" => $count,"memberCount" => $memberCount,"average" => round($count/$memberCount,2)]); // from the memberCount we calculate average
+                    $job_title_prev = $cleanedTransArray[$i]["job_title"];
+                    $count = $cleanedTransArray[$i]["count"];
+                    $memberCount = $cleanedTransArray[$i]["memberCount"]; 
+                }
+            }
+
+            return view("enquiry.transaction",['transArray' => $transArray]);
 
 
 
 
-
-
-
-            dd($cache);
         }
     }
 }

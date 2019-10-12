@@ -29,8 +29,22 @@
                         <tr>
                             <th>Job Title</th>
                             <th>Total Transaction Amount</th>
+                            <th>Average <small>(example: "average transactions done by an Accountant Assistant")</small></th>
                         </tr>
+                        @foreach ($transArray as $eachTransItem)
+                            <tr>
+                                <td>
+                                    @if($eachTransItem["job_title"] == "")
+                                        ---
+                                    @else
+                                        {{$eachTransItem["job_title"]}}
+                                    @endif
 
+                                </td>
+                                <td>{{$eachTransItem["count"]}}</td>
+                                <td>{{$eachTransItem["average"]}}</td>
+                            </tr>
+                        @endforeach
 
                     </table>
 
