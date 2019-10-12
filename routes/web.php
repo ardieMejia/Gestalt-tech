@@ -24,6 +24,10 @@ Route::post('/member', 'MemberController@store');
 
 // transaction
 Route::get('/transaction', 'TransactionController@index')->name('transaction');
-Route::post('/transaction', 'TransactionController@store'); 
+Route::post('/transaction', 'TransactionController@store');
+
+// enquiry
+Route::get('/enquiry', 'EnquiryController@search')->name('enquiry');
+
 
 

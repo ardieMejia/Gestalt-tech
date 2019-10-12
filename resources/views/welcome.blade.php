@@ -22,6 +22,12 @@
                 <div class="col-md-3">
                     <a href={{route("transaction")}}>Transaction Maintenance</a>
                 </div>
+                <div class="col-md-3">
+                    <form method="get" action="enquiry">
+                        <input name="type" value="transaction" hidden/>
+                        <input type="submit" value="Transaction Enquiry" />
+                    </form>
+                </div>
             </div>
 
 
