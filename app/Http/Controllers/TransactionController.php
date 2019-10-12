@@ -3,29 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\TransactionData;
+use Carbon\Carbon;
 
-class HomeController extends Controller
+class TransactionController extends Controller
 {
     /**
-
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-    public function index()
-    {
-        return view('home');
-=======
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -33,7 +16,9 @@ class HomeController extends Controller
     public function index()
     {
         //
-        return view("welcome");
+        $allTransactionData = TransactionData::all();
+
+        return view('transaction.list_and_crud',['allTransactionData' => $allTransactionData]);
     }
 
     /**
@@ -55,6 +40,14 @@ class HomeController extends Controller
     public function store(Request $request)
     {
         //
+        $newTransaction = new TransactionData;
+        $newTransaction->amount = $request->amount;
+        $newDate = Carbon::createFromFormat('m/d/Y',$request->transaction_date);
+        $newTransaction->transaction_date = $newDate;
+        $newTransaction->member_number = $request->member_number;
+        $newTransaction->save();
+
+        return redirect()->route('transaction');
     }
 
     /**
@@ -100,6 +93,5 @@ class HomeController extends Controller
     public function destroy($id)
     {
         //
->>>>>>> theRealQuestion_slow
     }
 }

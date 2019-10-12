@@ -3,29 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\MemberData;
+use Carbon\Carbon;
 
-class HomeController extends Controller
+class MemberController extends Controller
 {
     /**
-
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-    public function index()
-    {
-        return view('home');
-=======
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -33,7 +16,8 @@ class HomeController extends Controller
     public function index()
     {
         //
-        return view("welcome");
+        $allMemberData = MemberData::all();
+        return view('member.list_and_crud',['allMemberData' => $allMemberData]);
     }
 
     /**
@@ -55,6 +39,23 @@ class HomeController extends Controller
     public function store(Request $request)
     {
         //
+        // $request->member_number;
+        // MemberData->save();
+        $newMember = new MemberData;
+        $newMember->member_number = $request->member_number;
+        $newMember->first_name = $request->first_name;
+        $newMember->last_name = $request->last_name;
+        $newDOB = Carbon::createFromFormat('m/d/Y',$request->dob);
+        $newMember->dob = $newDOB;
+        $newMember->email = $request->email;
+        $newMember->gender = $request->gender;
+        $newMember->job_title = $request->job_title;
+        $newMember->save();
+
+
+        return redirect()->route('member');
+
+
     }
 
     /**
@@ -100,6 +101,5 @@ class HomeController extends Controller
     public function destroy($id)
     {
         //
->>>>>>> theRealQuestion_slow
     }
 }
