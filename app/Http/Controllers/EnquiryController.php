@@ -91,38 +91,31 @@ class EnquiryController extends Controller
 
 
         if (Input::get('type',null) == "transaction"){
-            $cache = DB::table("transaction_data")
-                   ->leftJoin('member_data','transaction_data.member_number','=','member_data.member_number')
-                   ->selectRaw('member_data.job_title,count(*) as count')
+
+            $memberCountQuery = DB::table("member_data")
+                   ->selectRaw('member_data.job_title as job_title,count(*) as memberCount')
+                              ->groupBy('member_data.job_title');
+
+            $cache = DB::table("transaction_data as t")
+                   ->leftJoin('member_data','t.member_number','=','member_data.member_number')
+                   ->selectRaw('member_data.job_title as job_title,count(*) as count,m2.memberCount')
+                   ->join(DB::raw('(' . $memberCountQuery->toSql() . ') m2'),
+                              function ($join) {
+                                  $join->on('member_data.job_title','=','m2.job_title');
+                                      
+                              }
+                   )
                    ->groupBy('member_data.job_title')
                    ->get();
 
 
-            $cache = $cache->toArray();
-            // ---------- trim trailing character I, II, III, IV
-            $newCache = [];
-            foreach ($cache as $cacheItem) {
-                $cacheItem->job_title = rtrim($cacheItem->job_title," I");
-                $cacheItem->job_title = rtrim($cacheItem->job_title," II");
-                $cacheItem->job_title = rtrim($cacheItem->job_title," III");
-                $cacheItem->job_title = rtrim($cacheItem->job_title," IV");
-                array_push($newCache,["job_title" => $cacheItem->job_title,"count" => $cacheItem->count]);
-            }
 
-            $newArray = [];
-            array_push($newArray,$newCache[0]);
-            $job_title_prev = $newCache[1]["job_title"];
-            $count = $newCache[1]["count"];
-            for ($i = 2; $i < sizeof($newCache); $i++) {
-                if ($newCache[$i]["job_title"] == $job_title_prev) {
-                    $count += $newCache[$i]["count"];
-                } else {                 //   otherwise
-                    array_push($newArray,["job_title" => $job_title_prev,"count" => $count]);
-                    $job_title_prev = $newCache[$i]["job_title"];
-                    $count = $newCache[$i]["count"];
-                }
-            }
-            return view("enquiry.transaction",['newArray' => $newArray]);
+
+
+
+
+
+            dd($cache);
         }
     }
 }

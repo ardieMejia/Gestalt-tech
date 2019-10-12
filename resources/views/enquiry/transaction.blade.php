@@ -30,12 +30,7 @@
                             <th>Job Title</th>
                             <th>Total Transaction Amount</th>
                         </tr>
-                        @foreach ($newArray as $cacheItem)
-                            <tr>
-                                <td>{{$cacheItem["job_title"]}}</td>
-                                <td>{{$cacheItem["count"]}}</td>
-                            </tr>
-                        @endforeach
+
 
                     </table>
 
